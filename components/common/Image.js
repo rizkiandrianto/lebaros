@@ -1,5 +1,5 @@
-export default function Image({ src, width }) {
-  return <img src={src} width={width} />
+export default function Image({ className, src, width }) {
+  return <img src={src} width={width} className={className} />
 }
 
 Image.defaultProps = {

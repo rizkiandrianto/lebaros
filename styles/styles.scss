@@ -1,9 +1,13 @@
 body {
-  background: $light;
+  background: #e8e8e8;
 }
 
 a {
   cursor: pointer;
+}
+
+p {
+  margin: 0;
 }
 
 .main-header {
@@ -14,4 +18,37 @@ a {
   padding-top: calc(56px + (#{$grid-gutter-width} / 2));
   background: $white;
   height: 100vh;
+  overflow-y: auto;
+}
+
+.product-wrapper {
+  .thumbnail-wrapper {
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+
+    .thumbnail {
+      position: absolute;
+      left:0;
+      top:0;
+      object-fit: cover;
+    }
+  }
+
+  .badge-wrapper {
+    .badge {
+      font-size: 10px;
+      background: $info;
+      padding: 2px 7px;
+      color: #fff;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+  }
+
+  .product-name {
+    font-size: 13px;
+    height: 44px;
+    overflow: hidden;
+  }
 }

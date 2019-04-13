@@ -2,3 +2,9 @@ $container-max-widths: (
   md: 480px,
   lg: 480px
 );
+
+$primary: #ac145a;
+
+$theme-colors: (
+  "primary": $primary
+);
