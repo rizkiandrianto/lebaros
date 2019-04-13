@@ -1,8 +1,24 @@
 import React, { Component } from 'react'
 import Image from './Image';
 import formaNumber from '../../utils/number';
+import Modal from './Modal';
+import ModalAddToCart from './Modal/ModalAddToCart';
 
 export default class ProductListItem extends Component {
+  state = {
+    modalDetail: false
+  }
+
+  modalDetailOperation = this.modalDetailOperation.bind(this)
+
+  modalDetailOperation(modalDetail = true) {
+    return () => {
+      this.setState({
+        modalDetail
+      });
+    };
+  }
+
   renderLabel() {
     const { product } = this.props;
     if (product.variantsDefinition.size) {
@@ -12,6 +28,16 @@ export default class ProductListItem extends Component {
     }
 
     return null;
+  }
+
+  renderModalAddToCart() {
+    const { product } = this.props;
+    const { modalDetail } = this.state;
+    return (
+      <Modal onHide={this.modalDetailOperation(false)} show={modalDetail}>
+        {modalDetail && <ModalAddToCart product={product} onAdded={this.modalDetailOperation(false)} />}
+      </Modal>
+    );
   }
 
   render() {
@@ -31,7 +57,12 @@ export default class ProductListItem extends Component {
             </div>
             <div className="col-6 text-right">
               <Image src="/static/images/icon-heart-greyDark.png" className="mr-3" />
-              <button onClick={this.buy} className="btn btn-primary btn-sm">Beli</button>
+              <button
+                onClick={this.modalDetailOperation()}
+                className="btn btn-primary btn-sm"
+              >
+                Beli
+              </button>
             </div>
           </div>
 
@@ -42,6 +73,7 @@ export default class ProductListItem extends Component {
             </div>
           </div>
         </div>
+        {this.renderModalAddToCart()}
       </div>
     )
   }

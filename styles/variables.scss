@@ -5,6 +5,7 @@ $container-max-widths: (
 
 $primary: #ac145a;
 
-$theme-colors: (
-  "primary": $primary
+$theme-colors: map-merge(
+  $theme-colors,
+  ("primary": $primary)
 );
