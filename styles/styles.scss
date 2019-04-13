@@ -16,7 +16,6 @@ p {
 
 .main-container {
   padding-top: calc(56px + (#{$grid-gutter-width} / 2));
-  background: $white;
   height: 100vh;
   overflow-y: auto;
 }
@@ -71,7 +70,6 @@ p {
     background: white;
     padding-top: 15px;
     padding-bottom: 15px;
-    min-height: 200px;
     top: 100%;
     z-index: 1;
     position: relative;
@@ -95,4 +93,8 @@ p {
       z-index: 0;
     }
   }
+}
+
+.filter-footer {
+  height: 56px;
 }
