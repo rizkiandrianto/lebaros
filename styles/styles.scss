@@ -2,7 +2,16 @@ body {
   background: $light;
 }
 
+a {
+  cursor: pointer;
+}
+
+.main-header {
+  height: 56px;
+}
+
 .main-container {
+  padding-top: calc(56px + (#{$grid-gutter-width} / 2));
   background: $white;
   height: 100vh;
 }
