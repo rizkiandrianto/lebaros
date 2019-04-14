@@ -7,6 +7,7 @@ import Image from '../components/common/Image';
 import Loading from '../static/images/loading.txt';
 import ProductListItem from '../components/common/ProductListItem';
 import Modal from '../components/common/Modal';
+import ModalFilter from '../components/common/Modal/ModalFilter';
 
 
 
@@ -16,6 +17,7 @@ export default class Home extends Component {
     product: {
       data: []
     },
+    modalFilter: false,
     modalSort: false,
     sort: [{
       title: 'Terbaru',
@@ -33,16 +35,48 @@ export default class Home extends Component {
     query: {
       sort_by: 'id',
       sort_order: 'DESC'
+    },
+    variables: {
+      color: [],
+      size: [],
+      price_range: []
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { query } = this.state;
     this.callData(query);
+    MarketCloud.variables.list().then((res) => {
+      const variables = {};
+      res.data.forEach((variable) => {
+        variables[variable.name] = JSON.parse(variable.value).data
+      });
+      this.setState({
+        variables
+      });
+    })
   }
 
   modalSortOperate = this.modalSortOperate.bind(this)
+  modalFilterOperate = this.modalFilterOperate.bind(this)
   sort = this.sort.bind(this)
+  changeFilter = this.changeFilter.bind(this)
+
+  changeFilter(id) {
+    const { variables, query } = this.state;
+    const selected_price = variables.price_range.find(price => id == price.id);
+    this.setState({
+      modalFilter: false
+    }, () => {
+      const filterBy = {};
+      if (selected_price.price_lt) filterBy.price_lt = selected_price.price_lt;
+      if (selected_price.price_gt) filterBy.price_gt = selected_price.price_gt;
+      this.callData({
+        ...query,
+        ...filterBy
+      });
+    });
+  }
 
   callData(param = {}) {
     this.setState({
@@ -60,6 +94,14 @@ export default class Home extends Component {
     return () => {
       this.setState({
         modalSort
+      });
+    };
+  }
+
+  modalFilterOperate(modalFilter = true) {
+    return () => {
+      this.setState({
+        modalFilter
       });
     };
   }
@@ -132,7 +174,7 @@ export default class Home extends Component {
   }
 
   render() {
-    const { modalSort } = this.state;
+    const { modalFilter, modalSort, variables } = this.state;
     return (
       <>
         <Head />
@@ -140,6 +182,7 @@ export default class Home extends Component {
         <div className="container main-container">
           {this.renderProducts()}
         </div>
+
         <div className="fixed-bottom bg-white filter-footer d-flex align-items-center">
           <div className="container">
             <div className="row">
@@ -155,9 +198,19 @@ export default class Home extends Component {
                 </Modal>
               </div>
               <div className="col-6">
-                <button className="btn btn-outline-secondary btn-block">
+                <button
+                  onClick={this.modalFilterOperate()}
+                  className="btn btn-outline-secondary btn-block"
+                >
                   Filter
                 </button>
+                <Modal
+                  className="modal-filter"
+                  show={modalFilter}
+                  onHide={this.modalFilterOperate(false)}
+                >
+                  {modalFilter && <ModalFilter onFilter={this.changeFilter} variables={variables} />}
+                </Modal>
               </div>
             </div>
           </div>

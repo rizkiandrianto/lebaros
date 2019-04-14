@@ -1,6 +1,6 @@
-export default function Modal({ children, show, onHide }) {
+export default function Modal({ className, children, show, onHide }) {
   return (
-    <div className={`modal ${show ? 'show' : ''}`}>
+    <div className={`modal ${show ? 'show' : ''} ${className}`}>
       <div className="modal-container container">
         {children}
       </div>
