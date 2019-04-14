@@ -1,5 +1,6 @@
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import Head from "../components/layout/Head";
 import Header from "../components/layout/Header";
 import MarketCloud from '../utils/marketcloud';
@@ -57,11 +58,11 @@ export default class Home extends Component {
         variables
       });
     })
-    window.addEventListener('scroll', this.scrollHandler, true);
+    findDOMNode(this.scrollWrapper).addEventListener('scroll', this.scrollHandler, true);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.scrollHandler);
+    findDOMNode(this.scrollWrapper).removeEventListener('scroll', this.scrollHandler);
   }
 
   modalSortOperate = this.modalSortOperate.bind(this)
@@ -69,6 +70,7 @@ export default class Home extends Component {
   sort = this.sort.bind(this)
   changeFilter = this.changeFilter.bind(this)
   scrollHandler = this.scrollHandler.bind(this)
+  addRef = this.addRef.bind(this)
 
   scrollHandler(e) {
     const { loading, query, product } = this.state;
@@ -80,6 +82,10 @@ export default class Home extends Component {
         page: product.page + 1
       })
     }
+  }
+
+  addRef(e) {
+    if (e) this.scrollWrapper = e;
   }
 
   changeFilter(id) {
@@ -217,11 +223,11 @@ export default class Home extends Component {
       <>
         <Head />
         <Header />
-        <div className="container main-container">
+        <div className="container main-container" ref={this.addRef}>
           {this.renderProducts()}
         </div>
 
-        <div className="fixed-bottom bg-white filter-footer d-flex align-items-center">
+        <div className="fixed-bottom border-top bg-white filter-footer d-flex align-items-center">
           <div className="container">
             <div className="row">
               <div className="col-6">

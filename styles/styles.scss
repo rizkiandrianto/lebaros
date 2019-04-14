@@ -113,6 +113,14 @@ p {
   }
 }
 
+.modal-fullscreen {
+  .modal-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+}
+
 .filter-footer {
   height: 56px;
 }
@@ -136,5 +144,31 @@ p {
       text-align: center;
       color: white;
     }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.product-detail-wrapper {
+  .action-header {
+    right: 0;
+    width: 100%;
+    display: flex;
+    text-align: right;
+    top: -15px;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    transition: all ease .3s;
+  }
+
+  .product-name {
+    font-size: 14px;
+    height: auto;
+  }
+
+  .footer-button {
+    position: sticky !important;
   }
 }
