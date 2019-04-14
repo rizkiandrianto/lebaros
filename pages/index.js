@@ -34,7 +34,9 @@ export default class Home extends Component {
     }],
     query: {
       sort_by: 'id',
-      sort_order: 'DESC'
+      sort_order: 'DESC',
+      page: 1,
+      per_page: 5
     },
     variables: {
       color: [],
@@ -55,18 +57,41 @@ export default class Home extends Component {
         variables
       });
     })
+    window.addEventListener('scroll', this.scrollHandler, true);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.scrollHandler);
   }
 
   modalSortOperate = this.modalSortOperate.bind(this)
   modalFilterOperate = this.modalFilterOperate.bind(this)
   sort = this.sort.bind(this)
   changeFilter = this.changeFilter.bind(this)
+  scrollHandler = this.scrollHandler.bind(this)
+
+  scrollHandler(e) {
+    const { loading, query, product } = this.state;
+    const isScrolled = e.target.scrollTop >= e.target.scrollHeight - (e.target.clientHeight + 200);
+
+    if (!loading && isScrolled && (product.page < product.pages)) {
+      this.callData({
+        ...query,
+        page: product.page + 1
+      })
+    }
+  }
 
   changeFilter(id) {
     const { variables, query } = this.state;
     const selected_price = variables.price_range.find(price => id == price.id);
     this.setState({
-      modalFilter: false
+      loading: true,
+      modalFilter: false,
+      product: {
+        data: [],
+        page: 1
+      }
     }, () => {
       const filterBy = {};
       if (selected_price.price_lt) filterBy.price_lt = selected_price.price_lt;
@@ -83,10 +108,16 @@ export default class Home extends Component {
       loading: true
     });
     MarketCloud.products.list(param).then((res) => {
-      this.setState({
-        product: res,
+      this.setState(prevState => ({
+        product: {
+          ...res,
+          data: param.page > 1 ? [
+            ...prevState.product.data,
+            ...res.data
+          ] : res.data
+        },
         loading: false
-      });
+      }));
     });
   }
 
@@ -127,7 +158,7 @@ export default class Home extends Component {
 
   renderProducts() {
     const { product, loading } = this.state;
-    if (loading) {
+    if (loading && !product.data.length) {
       return (
         <div className="container d-flex py-5 my-5 align-items-center justify-content-center">
           <Image width={50} src={Loading.toString()} />
@@ -144,6 +175,13 @@ export default class Home extends Component {
                 <ProductListItem product={item} key={item.id} />
               ))
             }
+            {loading && (
+              <div className="container-fluid">
+                <div className="row d-flex align-items-center justify-content-center pb-3 mb-5 mt-n5 bg-grey pt-3">
+                  <Image width={50} src={Loading.toString()} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       );

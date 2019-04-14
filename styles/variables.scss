@@ -4,8 +4,12 @@ $container-max-widths: (
 );
 
 $primary: #ac145a;
+$grey: #e8e8e8;
 
 $theme-colors: map-merge(
   $theme-colors,
-  ("primary": $primary)
+  (
+    "primary": $primary,
+    'grey': $grey
+  )
 );

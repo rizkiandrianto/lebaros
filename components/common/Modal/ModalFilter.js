@@ -12,6 +12,16 @@ export default class ModalFilter extends Component {
   changePriceRange = this.changePriceRange.bind(this)
   clickSoon = this.clickSoon.bind(this)
   saveFilter = this.saveFilter.bind(this)
+  resetFilter = this.resetFilter.bind(this)
+
+  resetFilter() {
+    this.setState(prevState => ({
+      filter: {
+        ...prevState.filter,
+        price_range: 0
+      }
+    }));
+  }
 
   saveFilter() {
     const { onFilter } = this.props;
@@ -67,7 +77,12 @@ export default class ModalFilter extends Component {
         <div className="mb-3">
           <p className="mb-2">Warna</p>
           {variables.color.map((color, index) => (
-            <a key={index} className="color-palette" style={{ background: color.colorValue }} />
+            <a
+              key={index}
+              className="color-palette"
+              style={{ background: color.colorValue }}
+              onClick={this.clickSoon}
+            />
           ))}
         </div>
 
@@ -89,7 +104,12 @@ export default class ModalFilter extends Component {
 
         <div className="row mt-5">
           <div className="col-6 pr-2">
-            <button className="btn btn-outline-secondary btn-block">Reset</button>
+            <button
+              className="btn btn-outline-secondary btn-block"
+              onClick={this.resetFilter}
+            >
+              Reset
+            </button>
           </div>
           <div className="col-6 pl-2">
             <button
