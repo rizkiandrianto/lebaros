@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import formaNumber from '../../../utils/number';
 import Image from '../Image';
+import setCart from '../../../utils/addToCart';
 
 export default class ModalAddToCart extends Component {
   componentDidMount() {
@@ -23,8 +24,9 @@ export default class ModalAddToCart extends Component {
   addToCart = this.addToCart.bind(this)
 
   addToCart() {
-    const { onAdded } = this.props;
+    const { onAdded, product } = this.props;
     if (onAdded) onAdded();
+    setCart(product);
   }
 
   selectVariant(variant, kind) {

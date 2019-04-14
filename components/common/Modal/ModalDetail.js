@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import Lightbox from 'react-image-lightbox';
 import formaNumber from '../../../utils/number';
 import Image from '../Image';
+import setCart from '../../../utils/addToCart';
 
 export default class ModalDetail extends Component {
   componentDidMount() {
@@ -66,8 +67,9 @@ export default class ModalDetail extends Component {
   }
 
   addToCart() {
-    const { onAdded } = this.props;
+    const { onAdded, product } = this.props;
     if (onAdded) onAdded();
+    setCart(product);
   }
 
   setRef(e) {
