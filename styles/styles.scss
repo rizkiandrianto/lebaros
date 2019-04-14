@@ -12,6 +12,23 @@ p {
 
 .main-header {
   height: 56px;
+
+  .badge {
+    position: absolute;
+    top: -5px;
+    right: 8px;
+    font-size: 8px;
+    background: $primary;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white;
+    border: 2px solid $white;
+    box-sizing: content-box;
+  }
 }
 
 .main-container {

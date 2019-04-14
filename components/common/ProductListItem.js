@@ -4,15 +4,29 @@ import formaNumber from '../../utils/number';
 import Modal from './Modal';
 import ModalAddToCart from './Modal/ModalAddToCart';
 import ModalDetail from './Modal/ModalDetail';
+import setWishlist from '../../utils/addToWishlist';
 
 export default class ProductListItem extends Component {
   state = {
     modalAddToCart: false,
-    modalDetail: false
+    modalDetail: false,
+    wishlist: []
   }
 
   modalAddToCartOperation = this.modalAddToCartOperation.bind(this)
   modalDetailOperation = this.modalDetailOperation.bind(this)
+  addToWishlist = this.addToWishlist.bind(this)
+
+  componentDidMount() {
+    this.setState({
+      wishlist: localStorage.getItem('wishlist') ? JSON.parse(localStorage.getItem('wishlist')) : []
+    });
+  }
+
+  addToWishlist() {
+    const { product } = this.props;
+    setWishlist(product);
+  }
 
   modalAddToCartOperation(modalAddToCart = true) {
     return () => {
@@ -73,6 +87,7 @@ export default class ProductListItem extends Component {
 
   render() {
     const { product } = this.props;
+    const { wishlist } = this.state;
     return (
       <div className="row product-wrapper mb-5" key={product.id}>
         <div className="thumbnail-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
@@ -87,7 +102,12 @@ export default class ProductListItem extends Component {
               </p>
             </div>
             <div className="col-6 text-right">
-              <Image src="/static/images/icon-heart-greyDark.png" className="mr-3" />
+              <a onClick={this.addToWishlist}>
+                <Image
+                  src={`/static/images/icon-heart-${ wishlist.find(item => item.id === product.id) ? 'berry' : 'greyDark'}.png`}
+                  className="mr-3"
+                />
+              </a>
               <button
                 onClick={this.modalAddToCartOperation()}
                 className="btn btn-primary btn-sm"
