@@ -20,6 +20,10 @@ module.exports = (config = {}, param = {}) => {
           }
         }
       ]
+    },
+    {
+      test: /\.txt$/,
+      use: ['raw-loader']
     }
   ];
 

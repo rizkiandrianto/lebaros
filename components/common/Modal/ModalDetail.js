@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
+import Lightbox from 'react-image-lightbox';
 import formaNumber from '../../../utils/number';
 import Image from '../Image';
 
@@ -24,7 +25,9 @@ export default class ModalDetail extends Component {
 
   state = {
     variant: {},
-    scrolled: false
+    scrolled: false,
+    photoIndex: 0,
+    zoomImage: false
   }
 
   selectVariant = this.selectVariant.bind(this)
@@ -32,6 +35,24 @@ export default class ModalDetail extends Component {
   setRef = this.setRef.bind(this)
   scrollHandler = this.scrollHandler.bind(this)
   closeDetail = this.closeDetail.bind(this)
+  operateZoom = this.operateZoom.bind(this)
+  lightboxHandler = this.lightboxHandler.bind(this)
+
+  lightboxHandler(photoIndex) {
+    return () => {
+      this.setState({
+        photoIndex
+      })
+    }
+  }
+
+  operateZoom(zoomImage = true) {
+    return () => {
+      this.setState({
+        zoomImage
+      });
+    }
+  }
 
   scrollHandler(e) {
     this.setState({
@@ -91,7 +112,8 @@ export default class ModalDetail extends Component {
 
   render() {
     const { product } = this.props;
-    const { scrolled, variant } = this.state;
+    const { photoIndex, scrolled, variant, zoomImage } = this.state;
+    const { images } = product;
 
     return (
       <div className="row mt-n3 pb-5 product-detail-wrapper" ref={this.setRef}>
@@ -102,15 +124,30 @@ export default class ModalDetail extends Component {
             </a>
           </div>
         </div>
-        <div className="col-12 px-0 mt-n5">
-          <Image src={product.images[0]} width="100%" />
+
+        <div className="col-12 px-0 mt-n5" onClick={this.operateZoom()}>
+          <Image src={product.images[photoIndex]} width="100%" />
+
+          {zoomImage && (
+            <Lightbox
+              mainSrc={images[photoIndex]}
+              nextSrc={images[(photoIndex + 1) % images.length]}
+              prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+              onCloseRequest={this.operateZoom(false)}
+              onMovePrevRequest={this.lightboxHandler((photoIndex + images.length - 1) % images.length)}
+              onMoveNextRequest={this.lightboxHandler((photoIndex + 1) % images.length)}
+            />
+          )}
         </div>
 
         <div className="row mx-0 mt-3">
           {
             product.images.map((image, index) => (
-              <div className="col-2" key={index}>
-                <Image src={image} width="100%" />
+              <div onClick={this.lightboxHandler(index)} className="col-2" key={index}>
+                <Image
+                  className={index === photoIndex ? 'border border-primary rounded' : ''}
+                  src={image} width="100%"
+                />
               </div>
             ))
           }

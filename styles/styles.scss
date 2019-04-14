@@ -172,3 +172,7 @@ p {
     position: sticky !important;
   }
 }
+
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+  z-index: $zindex-modal !important;
+}
