@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import { withRouter } from 'next/router';
 import Image from '../Image';
 import setCart from '../../../utils/addToCart';
+import locale from '../../../utils/locale';
 
-export default class ModalAddToCart extends Component {
+class ModalAddToCart extends Component {
   componentDidMount() {
     const { product } = this.props;
     const variants = {};
@@ -66,7 +68,7 @@ export default class ModalAddToCart extends Component {
   }
 
   render() {
-    const { product } = this.props;
+    const { product, router } = this.props;
     const { variant } = this.state;
 
     return (
@@ -87,11 +89,11 @@ export default class ModalAddToCart extends Component {
           <div className="row pt-3 border-top mt-3">
             <div className="col-12">
               <button
-                className="btn btn-primary btn-block"
+                className="btn btn-primary btn-block text-capitalize"
                 disabled={Object.keys(variant).some(kind => !variant[kind])}
                 onClick={this.addToCart}
               >
-                Tambahkan ke Keranjang
+                {locale.addToCart[router.locale]}
               </button>
             </div>
           </div>
@@ -100,3 +102,5 @@ export default class ModalAddToCart extends Component {
     )
   }
 }
+
+export default withRouter(ModalAddToCart)

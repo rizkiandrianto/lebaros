@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
+import { withRouter } from 'next/router';
 import Head from "../components/layout/Head";
 import Header from "../components/layout/Header";
 import { commerce } from '../utils/commerce';
@@ -9,38 +10,43 @@ import Loading from '../public/images/loading.js';
 import ProductListItem from '../components/common/ProductListItem';
 import Modal from '../components/common/Modal';
 import ModalFilter from '../components/common/Modal/ModalFilter';
+import locale from '../utils/locale';
 
-export default class Home extends Component {
-  state = {
-    loading: true,
-    product: {
-      data: []
-    },
-    modalFilter: false,
-    modalSort: false,
-    sort: [{
-      title: 'Terbaru',
-      sort_by: 'id',
-      sort_order: 'DESC'
-    }, {
-      title: 'Termurah',
-      sort_by: 'price',
-      sort_order: 'ASC'
-    }, {
-      title: 'Termahal',
-      sort_by: 'price',
-      sort_order: 'DESC'
-    }],
-    query: {
-      sort_by: 'id',
-      sort_order: 'DESC',
-      page: 1,
-      per_page: 5
-    },
-    variables: {
-      color: [],
-      size: [],
-      price_range: []
+class Home extends Component {
+  constructor(props) {
+    super(props);
+    const { router } = props;
+    this.state = {
+      loading: true,
+      product: {
+        data: []
+      },
+      modalFilter: false,
+      modalSort: false,
+      sort: [{
+        title: locale.latest[router.locale],
+        sort_by: 'id',
+        sort_order: 'DESC'
+      }, {
+        title: locale.cheapest[router.locale],
+        sort_by: 'price',
+        sort_order: 'ASC'
+      }, {
+        title: locale.expensive[router.locale],
+        sort_by: 'price',
+        sort_order: 'DESC'
+      }],
+      query: {
+        sort_by: 'id',
+        sort_order: 'DESC',
+        page: 1,
+        per_page: 5
+      },
+      variables: {
+        color: [],
+        size: [],
+        price_range: []
+      }
     }
   }
 
@@ -149,6 +155,7 @@ export default class Home extends Component {
 
   renderProducts() {
     const { product, loading } = this.state;
+    const { router } = this.props;
     if (loading && !product.data.length) {
       return (
         <div className="container d-flex py-5 my-5 align-items-center justify-content-center">
@@ -178,8 +185,8 @@ export default class Home extends Component {
       );
     }
 
-    return (<p className="d-flex align-items-center py-5 justify-content-center">
-      Tidak ada Produk
+    return (<p className="d-flex align-items-center py-5 justify-content-center text-capitalize">
+      {locale.noProduct[router.locale]}
     </p>);
   }
 
@@ -204,6 +211,7 @@ export default class Home extends Component {
 
   render() {
     const { modalFilter, modalSort, variables } = this.state;
+    const { router } = this.props;
     return (
       <>
         <Head />
@@ -218,9 +226,9 @@ export default class Home extends Component {
               <div className="col-6">
                 <button
                   onClick={this.modalSortOperate()}
-                  className="btn btn-outline-secondary btn-block"
+                  className="btn btn-outline-secondary btn-block text-capitalize"
                 >
-                  Urutkan
+                  {locale.sort[router.locale]}
                 </button>
                 <Modal show={modalSort} onHide={this.modalSortOperate(false)}>
                   {this.renderSortable()}
@@ -229,9 +237,9 @@ export default class Home extends Component {
               <div className="col-6">
                 <button
                   onClick={this.modalFilterOperate()}
-                  className="btn btn-outline-secondary btn-block"
+                  className="btn btn-outline-secondary btn-block text-capitalize"
                 >
-                  Filter
+                  {locale.filter[router.locale]}
                 </button>
                 <Modal
                   className="modal-filter"
@@ -249,3 +257,4 @@ export default class Home extends Component {
   }
 }
 
+export default withRouter(Home)

@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { withRouter } from 'next/router'
 import Image from './Image';
 import Modal from './Modal';
 import ModalAddToCart from './Modal/ModalAddToCart';
 import ModalDetail from './Modal/ModalDetail';
 import setWishlist from '../../utils/addToWishlist';
+import locale from '../../utils/locale';
 
-export default class ProductListItem extends Component {
+export default withRouter(class ProductListItem extends Component {
   state = {
     modalAddToCart: false,
     modalDetail: false,
@@ -86,9 +88,8 @@ export default class ProductListItem extends Component {
   }
 
   render() {
-    const { product } = this.props;
+    const { product, router } = this.props;
     const { wishlist } = this.state;
-    console.log()
     return (
       <div className="row product-wrapper bg-white mb-5" key={product.id}>
         <div className="thumbnail-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
@@ -113,9 +114,9 @@ export default class ProductListItem extends Component {
               </a>
               <button
                 onClick={this.modalAddToCartOperation()}
-                className="btn btn-primary btn-sm ml-2"
+                className="btn btn-primary btn-sm ml-2 text-capitalize"
               >
-                Beli
+                {locale.buy[router.locale]}
               </button>
             </div>
           </div>
@@ -142,4 +143,4 @@ export default class ProductListItem extends Component {
       </div>
     )
   }
-}
+})

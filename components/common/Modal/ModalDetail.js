@@ -3,8 +3,10 @@ import { findDOMNode } from 'react-dom';
 import Lightbox from 'react-image-lightbox';
 import Image from '../Image';
 import setCart from '../../../utils/addToCart';
+import locale from '../../../utils/locale';
+import { withRouter } from 'next/router';
 
-export default class ModalDetail extends Component {
+class ModalDetail extends Component {
   componentDidMount() {
     const { product } = this.props;
     const variants = {};
@@ -113,7 +115,7 @@ export default class ModalDetail extends Component {
   }
 
   render() {
-    const { product } = this.props;
+    const { product, router } = this.props;
     const { photoIndex, scrolled, variant, zoomImage } = this.state;
     const { assets: images = [] } = product;
 
@@ -178,10 +180,10 @@ export default class ModalDetail extends Component {
             <div className="row fixed-bottom footer-button">
               <div className="col-12">
                 <button
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-block text-capitalize"
                   onClick={this.addToCart}
                 >
-                  Tambahkan ke Keranjang
+                  {locale.addToCart[router.locale]}
                 </button>
               </div>
             </div>
@@ -191,3 +193,5 @@ export default class ModalDetail extends Component {
     )
   }
 }
+
+export default withRouter(ModalDetail);

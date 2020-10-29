@@ -1,6 +1,9 @@
-import React, { Component } from 'react'
+import { withRouter } from 'next/router';
+import React, { Component } from 'react';
+import locale from '../../../utils/locale';
 
-export default class ModalFilter extends Component {
+
+class ModalFilter extends Component {
   state = {
     filter: {
       color: [],
@@ -58,12 +61,12 @@ export default class ModalFilter extends Component {
   }
 
   render() {
-    const { variables } = this.props;
+    const { variables, router } = this.props;
     const { filter } = this.state;
     return (
       <div>
-        <div className="form-group">
-          <label htmlFor="price_range">Rentang Harga</label>
+        <div className="form-group text-capitalize">
+          <label htmlFor="price_range">{locale.priceRange[router.locale]}</label>
           <select
             onChange={this.changePriceRange}
             className="form-control"
@@ -75,7 +78,7 @@ export default class ModalFilter extends Component {
         </div>
 
         <div className="mb-3">
-          <p className="mb-2">Warna</p>
+          <p className="mb-2 text-capitalize">{locale.color[router.locale]}</p>
           {variables.color.map((color, index) => (
             <a
               key={index}
@@ -87,7 +90,7 @@ export default class ModalFilter extends Component {
         </div>
 
         <div>
-          <p className="mb-2">Ukuran</p>
+          <p className="mb-2 text-capitalize">{locale.size[router.locale]}</p>
           {variables.size.map((size, index) => (
             <button
               className={`btn
@@ -105,18 +108,18 @@ export default class ModalFilter extends Component {
         <div className="row mt-5">
           <div className="col-6 pr-2">
             <button
-              className="btn btn-outline-secondary btn-block"
+              className="btn btn-outline-secondary btn-block text-capitalize"
               onClick={this.resetFilter}
             >
-              Reset
+              {locale.reset[router.locale]}
             </button>
           </div>
           <div className="col-6 pl-2">
             <button
-              className="btn btn-primary btn-block"
+              className="btn btn-primary btn-block text-capitalize"
               onClick={this.saveFilter}
             >
-              Terapkan
+              {locale.apply[router.locale]}
             </button>
           </div>
         </div>
@@ -124,3 +127,5 @@ export default class ModalFilter extends Component {
     );
   }
 }
+
+export default withRouter(ModalFilter);
