@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@chec/commerce.js": "^2.2.0",
+    "algoliasearch": "^4.5.1",
     "bootstrap": "^4.3.1",
     "marketcloud-js": "^2.3.6",
     "next": "^10.0.0",
