@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import formaNumber from '../../../utils/number';
 import Image from '../Image';
 import setCart from '../../../utils/addToCart';
 
@@ -7,8 +6,8 @@ export default class ModalAddToCart extends Component {
   componentDidMount() {
     const { product } = this.props;
     const variants = {};
-    Object.keys(product.variantsDefinition).forEach((variant) => {
-      variants[variant] = ''
+    product.variants.forEach((variant) => {
+      variants[variant.name] = ''
     });
 
     this.setState({
@@ -44,12 +43,12 @@ export default class ModalAddToCart extends Component {
   renderOption() {
     const { product } = this.props;
     const { variant: stateVariant } = this.state;
-    return Object.keys(product.variantsDefinition)
+    return product.variants
       .map((variant, index) => (
         <div key={index}>
-          <p className="text-capitalize">{variant}</p>
+          <p className="text-capitalize">{variant.name}</p>
           <div className="mb-2">
-            {product.variantsDefinition[variant].map((kind) => (
+            {product.variants[index].options.map((kind) => (
               <button
                 onClick={this.selectVariant(variant, kind)}
                 className={`btn
@@ -57,7 +56,7 @@ export default class ModalAddToCart extends Component {
                 btn-outline-${stateVariant[variant] === kind ? 'primary' : 'secondary'}
                 text-uppercase mr-1`}
               >
-                {kind}
+                {kind.name}
               </button>
             ))}
           </div>
@@ -74,11 +73,11 @@ export default class ModalAddToCart extends Component {
         <div className="col-12">
           <div className="row pb-3 border-bottom mb-2">
             <div className="col d-flex align-items-center">
-              <Image src={product.images[0]} width="100%" />
+              <Image src={product.media.source} width="100%" />
             </div>
             <div className="col-10 pl-0">
               <p>{product.name}</p>
-              <p>{formaNumber(product.price, true)}</p>
+              <p>{product.price.formatted}</p>
             </div>
           </div>
 

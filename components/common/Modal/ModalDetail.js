@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import Lightbox from 'react-image-lightbox';
-import formaNumber from '../../../utils/number';
 import Image from '../Image';
 import setCart from '../../../utils/addToCart';
 
@@ -9,8 +8,8 @@ export default class ModalDetail extends Component {
   componentDidMount() {
     const { product } = this.props;
     const variants = {};
-    Object.keys(product.variantsDefinition).forEach((variant) => {
-      variants[variant] = ''
+    product.variants.forEach((variant) => {
+      variants[variant.name] = ''
     });
 
     this.setState({
@@ -91,12 +90,12 @@ export default class ModalDetail extends Component {
   renderOption() {
     const { product } = this.props;
     const { variant: stateVariant } = this.state;
-    return Object.keys(product.variantsDefinition)
+    return product.variants
       .map((variant, index) => (
         <div key={index}>
-          <p className="text-capitalize">{variant}</p>
+          <p className="text-capitalize">{variant.name}</p>
           <div className="mb-2">
-            {product.variantsDefinition[variant].map((kind) => (
+            {product.variants[index].options.map((kind) => (
               <button
                 onClick={this.selectVariant(variant, kind)}
                 className={`btn
@@ -104,7 +103,7 @@ export default class ModalDetail extends Component {
                 btn-outline-${stateVariant[variant] === kind ? 'primary' : 'secondary'}
                 text-uppercase mr-1`}
               >
-                {kind}
+                {kind.name}
               </button>
             ))}
           </div>
@@ -115,7 +114,7 @@ export default class ModalDetail extends Component {
   render() {
     const { product } = this.props;
     const { photoIndex, scrolled, variant, zoomImage } = this.state;
-    const { images } = product;
+    const { assets: images = [] } = product;
 
     return (
       <div className="row mt-n3 pb-5 product-detail-wrapper" ref={this.setRef}>
@@ -128,13 +127,13 @@ export default class ModalDetail extends Component {
         </div>
 
         <div className="col-12 px-0 mt-n5" onClick={this.operateZoom()}>
-          <Image src={product.images[photoIndex]} width="100%" />
+          <Image src={product.assets[photoIndex].url} width="100%" />
 
           {zoomImage && (
             <Lightbox
-              mainSrc={images[photoIndex]}
-              nextSrc={images[(photoIndex + 1) % images.length]}
-              prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+              mainSrc={images[photoIndex].url}
+              nextSrc={images[(photoIndex + 1) % images.length].url}
+              prevSrc={images[(photoIndex + images.length - 1) % images.length].url}
               onCloseRequest={this.operateZoom(false)}
               onMovePrevRequest={this.lightboxHandler((photoIndex + images.length - 1) % images.length)}
               onMoveNextRequest={this.lightboxHandler((photoIndex + 1) % images.length)}
@@ -144,11 +143,11 @@ export default class ModalDetail extends Component {
 
         <div className="row mx-0 mt-3">
           {
-            product.images.map((image, index) => (
+            images.map((image, index) => (
               <div onClick={this.lightboxHandler(index)} className="col-2" key={index}>
                 <Image
                   className={index === photoIndex ? 'border border-primary rounded' : ''}
-                  src={image} width="100%"
+                  src={image.url} width="100%"
                 />
               </div>
             ))
@@ -159,7 +158,7 @@ export default class ModalDetail extends Component {
         <div className="col-12 mt-3">
           <div className="row pb-3 border-bottom mb-2 mx-0">
             <div className="col-12 pl-0">
-              <p>{formaNumber(product.price, true)}</p>
+              <p>{product.price.formatted}</p>
               <p className="product-name">{product.name}</p>
             </div>
           </div>

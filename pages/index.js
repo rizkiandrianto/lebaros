@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import Head from "../components/layout/Head";
 import Header from "../components/layout/Header";
-import MarketCloud from '../utils/marketcloud';
+import { commerce } from '../utils/commerce';
 import Image from '../components/common/Image';
 import Loading from '../static/images/loading.txt';
 import ProductListItem from '../components/common/ProductListItem';
 import Modal from '../components/common/Modal';
 import ModalFilter from '../components/common/Modal/ModalFilter';
-
-
 
 export default class Home extends Component {
   state = {
@@ -49,15 +47,6 @@ export default class Home extends Component {
   async componentDidMount() {
     const { query } = this.state;
     this.callData(query);
-    MarketCloud.variables.list().then((res) => {
-      const variables = {};
-      res.data.forEach((variable) => {
-        variables[variable.name] = JSON.parse(variable.value).data
-      });
-      this.setState({
-        variables
-      });
-    })
     findDOMNode(this.scrollWrapper).addEventListener('scroll', this.scrollHandler, true);
   }
 
@@ -109,18 +98,14 @@ export default class Home extends Component {
     });
   }
 
-  callData(param = {}) {
+  callData() {
     this.setState({
       loading: true
     });
-    MarketCloud.products.list(param).then((res) => {
-      this.setState(prevState => ({
+    commerce.products.list().then((res) => {
+      this.setState(() => ({
         product: {
-          ...res,
-          data: param.page > 1 ? [
-            ...prevState.product.data,
-            ...res.data
-          ] : res.data
+          data: res.data
         },
         loading: false
       }));

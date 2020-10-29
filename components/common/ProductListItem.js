@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Image from './Image';
-import formaNumber from '../../utils/number';
 import Modal from './Modal';
 import ModalAddToCart from './Modal/ModalAddToCart';
 import ModalDetail from './Modal/ModalDetail';
@@ -46,9 +45,10 @@ export default class ProductListItem extends Component {
 
   renderLabel() {
     const { product } = this.props;
-    if (product.variantsDefinition.size) {
-      return product.variantsDefinition.size.map((size) => (
-        <span className="badge mr-1" key={size}>{size}</span>
+    const isHasSize = product.variants.find(variable => variable.name === 'size');
+    if (isHasSize) {
+      return isHasSize.options.map((size) => (
+        <span className="badge mr-1" key={size}>{size.name}</span>
       ));
     }
 
@@ -91,7 +91,7 @@ export default class ProductListItem extends Component {
     return (
       <div className="row product-wrapper mb-5" key={product.id}>
         <div className="thumbnail-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
-          <Image width="100%" className="img-fluid thumbnail" src={product.images[0]} />
+          <Image width="100%" className="img-fluid thumbnail" src={product.media.source} />
         </div>
         <div className="col-12 border-top">
 
@@ -123,7 +123,7 @@ export default class ProductListItem extends Component {
                 className="text-truncate cursor-pointer"
                 onClick={this.modalDetailOperation()}
               >
-                {formaNumber(product.price, true)}
+                {product.price.formatted}
               </p>
               <p
                 className="product-name cursor-pointer"
