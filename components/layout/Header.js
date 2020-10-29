@@ -21,28 +21,28 @@ export default class Header extends Component {
       <header className="main-header fixed-top d-flex align-items-center bg-white border-bottom">
         <div className="container">
           <div className="row">
-            <div className="col">
+            <div className="col-auto">
               <a>
-                <Image src="/static/images/icon-arrow-left-greyDark.png" />
+                <Image width={24} height={24} src="/images/icon-arrow-left-greyDark.png" />
               </a>
             </div>
-            <div className="col-5">
+            <div className="flex-grow-1">
               <p className="mb-0">Dress</p>
             </div>
-            <div className="col text-right">
+            <div className="col-auto text-right">
               <a>
-                <Image src="/static/images/icon-search-greyDark.png" />
+                <Image width={24} height={24} src="/images/icon-search-greyDark.png" />
               </a>
             </div>
-            <div className="col text-right">
+            <div className="col-auto text-right">
               <a>
-                <Image src="/static/images/icon-heart-greyDark.png" />
+                <Image width={24} height={24} src="/images/icon-heart-greyDark.png" />
                 {wishlist.length > 0 && <span className="badge">{wishlist.length}</span>}
               </a>
             </div>
-            <div className="col text-right">
+            <div className="col-auto text-right">
               <a>
-                <Image src="/static/images/icon-cart-greyDark.png" />
+                <Image width={24} height={24} src="/images/icon-cart-greyDark.png" />
                 {cart.length > 0 && <span className="badge">{cart.length}</span>}
               </a>
             </div>

@@ -5,7 +5,7 @@ import Head from "../components/layout/Head";
 import Header from "../components/layout/Header";
 import { commerce } from '../utils/commerce';
 import Image from '../components/common/Image';
-import Loading from '../static/images/loading.txt';
+import Loading from '../public/images/loading.js';
 import ProductListItem from '../components/common/ProductListItem';
 import Modal from '../components/common/Modal';
 import ModalFilter from '../components/common/Modal/ModalFilter';
@@ -152,14 +152,14 @@ export default class Home extends Component {
     if (loading && !product.data.length) {
       return (
         <div className="container d-flex py-5 my-5 align-items-center justify-content-center">
-          <Image width={50} src={Loading.toString()} />
+          <Image width={50} height={50} src={Loading.toString()} />
         </div>
       );
     }
 
     if (product.data && product.data.length) {
       return (
-        <div className="bg-white row">
+        <div className="row">
           <div className="col-12">
             {
               product.data.map((item) => (
@@ -169,7 +169,7 @@ export default class Home extends Component {
             {loading && (
               <div className="container-fluid">
                 <div className="row d-flex align-items-center justify-content-center pb-3 mb-5 mt-n5 bg-grey pt-3">
-                  <Image width={50} src={Loading.toString()} />
+                  <Image width={50} height={50} src={Loading} />
                 </div>
               </div>
             )}

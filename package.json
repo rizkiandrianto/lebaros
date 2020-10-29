@@ -1,5 +1,5 @@
 {
-  "name": "sorabel",
+  "name": "lebaros",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,11 +14,11 @@
     "@chec/commerce.js": "^2.2.0",
     "bootstrap": "^4.3.1",
     "marketcloud-js": "^2.3.6",
-    "next": "^8.0.4",
+    "next": "^10.0.0",
     "node-sass": "^4.14.1",
     "raw-loader": "^2.0.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-image-lightbox": "^5.1.0",
     "sass-loader": "^7.1.0"
   }

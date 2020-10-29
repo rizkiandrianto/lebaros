@@ -1,5 +1,9 @@
-const webpackConfig = require('./webpack.config.js');
-
 module.exports = {
-  webpack: (config, { dev }) => webpackConfig(config, { dev })
-};
+  images: {
+    domains: ['localhost', 'cdn.chec.io'],
+  },
+  i18n: {
+    locales: ['en', 'id'],
+    defaultLocale: 'id'
+  }
+}

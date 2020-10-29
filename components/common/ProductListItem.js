@@ -48,7 +48,7 @@ export default class ProductListItem extends Component {
     const isHasSize = product.variants.find(variable => variable.name === 'size');
     if (isHasSize) {
       return isHasSize.options.map((size) => (
-        <span className="badge mr-1" key={size}>{size.name}</span>
+        <span className="badge mr-1" key={size.id}>{size.name}</span>
       ));
     }
 
@@ -88,10 +88,11 @@ export default class ProductListItem extends Component {
   render() {
     const { product } = this.props;
     const { wishlist } = this.state;
+    console.log()
     return (
-      <div className="row product-wrapper mb-5" key={product.id}>
+      <div className="row product-wrapper bg-white mb-5" key={product.id}>
         <div className="thumbnail-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
-          <Image width="100%" className="img-fluid thumbnail" src={product.media.source} />
+          <Image width={480} height={480} className="img-fluid thumbnail" src={product.media.source} />
         </div>
         <div className="col-12 border-top">
 
@@ -101,16 +102,18 @@ export default class ProductListItem extends Component {
                 {this.renderLabel()}
               </p>
             </div>
-            <div className="col-6 text-right">
+            <div className="col-6 text-right d-flex align-items-center justify-content-end">
               <a onClick={this.addToWishlist}>
                 <Image
-                  src={`/static/images/icon-heart-${ wishlist.find(item => item.id === product.id) ? 'berry' : 'greyDark'}.png`}
+                  width={24}
+                  height={24}
+                  src={`/images/icon-heart-${ wishlist.find(item => item.id === product.id) ? 'berry' : 'greyDark'}.png`}
                   className="mr-3"
                 />
               </a>
               <button
                 onClick={this.modalAddToCartOperation()}
-                className="btn btn-primary btn-sm"
+                className="btn btn-primary btn-sm ml-2"
               >
                 Beli
               </button>

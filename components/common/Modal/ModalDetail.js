@@ -81,7 +81,7 @@ export default class ModalDetail extends Component {
       this.setState(prevState => ({
         variant: {
           ...prevState.variant,
-          [variant]: kind
+          [variant.name]: kind.id
         }
       }));
     };
@@ -97,10 +97,11 @@ export default class ModalDetail extends Component {
           <div className="mb-2">
             {product.variants[index].options.map((kind) => (
               <button
+                key={kind.id}
                 onClick={this.selectVariant(variant, kind)}
                 className={`btn
                 btn-sm
-                btn-outline-${stateVariant[variant] === kind ? 'primary' : 'secondary'}
+                btn-outline-${stateVariant[variant.name] === kind.id ? 'primary' : 'secondary'}
                 text-uppercase mr-1`}
               >
                 {kind.name}
@@ -121,13 +122,13 @@ export default class ModalDetail extends Component {
         <div className={`sticky-top text-left action-header py-2 ${scrolled ? 'bg-white border-bottom' : ''}`}>
           <div className="container">
             <a onClick={this.closeDetail}>
-              <Image src="/static/images/icon-arrow-left-greyDark.png" />
+              <Image width={24} height={24} src="/images/icon-arrow-left-greyDark.png" />
             </a>
           </div>
         </div>
 
         <div className="col-12 px-0 mt-n5" onClick={this.operateZoom()}>
-          <Image src={product.assets[photoIndex].url} width="100%" />
+          <Image className="object-fit-contain" src={product.assets[photoIndex].url} width={480} height={500} />
 
           {zoomImage && (
             <Lightbox
@@ -144,10 +145,12 @@ export default class ModalDetail extends Component {
         <div className="row mx-0 mt-3">
           {
             images.map((image, index) => (
-              <div onClick={this.lightboxHandler(index)} className="col-2" key={index}>
+              <div onClick={this.lightboxHandler(index)} className="col-2 px-2" key={index}>
                 <Image
-                  className={index === photoIndex ? 'border border-primary rounded' : ''}
-                  src={image.url} width="100%"
+                  className={`object-fit-contain ${index === photoIndex ? 'border border-primary rounded' : ''}`}
+                  src={image.url}
+                  width={150}
+                  height={150}
                 />
               </div>
             ))
@@ -167,7 +170,7 @@ export default class ModalDetail extends Component {
 
           <div className="row mt-n1 px-3 pt-3">
             <div className="col-12 border-top px-0">
-              <div className="row" dangerouslySetInnerHTML={{ __html: product.description }} />
+              <div className="my-3" dangerouslySetInnerHTML={{ __html: product.description }} />
             </div>
           </div>
 
