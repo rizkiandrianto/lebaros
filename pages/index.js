@@ -4,7 +4,6 @@ import { findDOMNode } from 'react-dom';
 import { withRouter } from 'next/router';
 import Head from "../components/layout/Head";
 import Header from "../components/layout/Header";
-import { commerce } from '../utils/commerce';
 import Image from '../components/common/Image';
 import Loading from '../public/images/loading.js';
 import ProductListItem from '../components/common/ProductListItem';
@@ -13,20 +12,26 @@ import ModalFilter from '../components/common/Modal/ModalFilter';
 import locale from '../utils/locale';
 
 class Home extends Component {
+  static async getInitialProps(ctx) {
+    const host = new URL(ctx?.req?.headers?.referer)?.origin;
+    return {
+      products: await fetch(`${host}/api/products?hitsPerPage=3`)
+        .then(res => res.json())
+    }
+  }
+
   constructor(props) {
     super(props);
-    const { router } = props;
+    const { router, products } = props;
     this.state = {
-      loading: true,
-      product: {
-        data: []
-      },
+      loading: false,
+      product: products,
       modalFilter: false,
       modalSort: false,
       sort: [{
         title: locale.latest[router.locale],
-        sort_by: 'id',
-        sort_order: 'DESC'
+        sort_by: null,
+        sort_order: null
       }, {
         title: locale.cheapest[router.locale],
         sort_by: 'price',
@@ -37,10 +42,8 @@ class Home extends Component {
         sort_order: 'DESC'
       }],
       query: {
-        sort_by: 'id',
-        sort_order: 'DESC',
-        page: 1,
-        per_page: 5
+        sort_by: null,
+        sort_order: null
       },
       variables: {
         color: [],
@@ -51,8 +54,6 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    const { query } = this.state;
-    this.callData(query);
     findDOMNode(this.scrollWrapper).addEventListener('scroll', this.scrollHandler, true);
   }
 
@@ -67,11 +68,45 @@ class Home extends Component {
   scrollHandler = this.scrollHandler.bind(this)
   addRef = this.addRef.bind(this)
 
+  callData(param = {}) {
+    this.setState({
+      loading: true
+    });
+    const { sort_by: sort, sort_order: order } = param;
+    const { product } = this.state;
+    var url = new URL(`${window.location.origin}/api/products`);
+    const finalParam = {
+      sort,
+      order,
+      page: param.page,
+      hitsPerPage: param.hitsPerPage || product.hitsPerPage
+    };
+
+    Object.keys(finalParam).forEach(key => {
+      if (finalParam[key]) url.searchParams.append(key, finalParam[key]);
+    });
+
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        this.setState(prevState => ({
+          loading: false,
+          product: {
+            ...res,
+            hits: [
+              ...prevState.product?.hits || [],
+              ...res.hits
+            ]
+          }
+        }));
+      });
+  }
+
   scrollHandler(e) {
     const { loading, query, product } = this.state;
-    const isScrolled = e.target.scrollTop >= e.target.scrollHeight - (e.target.clientHeight + 200);
+    const isScrolled = e.target.scrollTop >= e.target.scrollHeight - (e.target.clientHeight + 300);
 
-    if (!loading && isScrolled && (product.page < product.pages)) {
+    if (!loading && isScrolled && (product.nbPages !== product.page + 1)) {
       this.callData({
         ...query,
         page: product.page + 1
@@ -90,7 +125,7 @@ class Home extends Component {
       loading: true,
       modalFilter: false,
       product: {
-        data: [],
+        hits: [],
         page: 1
       }
     }, () => {
@@ -101,20 +136,6 @@ class Home extends Component {
         ...query,
         ...filterBy
       });
-    });
-  }
-
-  callData() {
-    this.setState({
-      loading: true
-    });
-    commerce.products.list().then((res) => {
-      this.setState(() => ({
-        product: {
-          data: res.data
-        },
-        loading: false
-      }));
     });
   }
 
@@ -143,11 +164,16 @@ class Home extends Component {
           ...prevState.query,
           sort_by: sort.sort_by,
           sort_order: sort.sort_order
+        },
+        product: {
+          hits: [],
         }
       }), () => {
         this.callData({
           sort_by: sort.sort_by,
-          sort_order: sort.sort_order
+          sort_order: sort.sort_order,
+          page: 0,
+          hitsPerPage: 3
         });
       });
     };
@@ -156,7 +182,7 @@ class Home extends Component {
   renderProducts() {
     const { product, loading } = this.state;
     const { router } = this.props;
-    if (loading && !product.data.length) {
+    if (loading && !product?.hits?.length) {
       return (
         <div className="container d-flex py-5 my-5 align-items-center justify-content-center">
           <Image width={50} height={50} src={Loading.toString()} />
@@ -164,12 +190,12 @@ class Home extends Component {
       );
     }
 
-    if (product.data && product.data.length) {
+    if (product?.hits?.length) {
       return (
         <div className="row">
           <div className="col-12">
             {
-              product.data.map((item) => (
+              product.hits.map((item) => (
                 <ProductListItem product={item} key={item.id} />
               ))
             }
@@ -196,7 +222,7 @@ class Home extends Component {
       <a
         onClick={this.sort(item)}
         key={index}
-        className={`d-block ${index !== sort.length - 1 ? 'border-bottom' : ''} py-1`}
+        className={`d-block text-capitalize ${index !== sort.length - 1 ? 'border-bottom' : ''} py-1`}
       >
         {item.title}
         {

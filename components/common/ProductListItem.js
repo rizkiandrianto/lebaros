@@ -50,7 +50,7 @@ export default withRouter(class ProductListItem extends Component {
     const isHasSize = product.variants.find(variable => variable.name === 'size');
     if (isHasSize) {
       return isHasSize.options.map((size) => (
-        <span className="badge mr-1" key={size.id}>{size.name}</span>
+        <span className="badge mr-1 mb-2 d-inline-block" key={size.id}>{size.name}</span>
       ));
     }
 
@@ -91,19 +91,22 @@ export default withRouter(class ProductListItem extends Component {
     const { product, router } = this.props;
     const { wishlist } = this.state;
     return (
-      <div className="row product-wrapper bg-white mb-5" key={product.id}>
+      <div className="row product-wrapper bg-white mb-4" key={product.id}>
         <div className="thumbnail-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
           <Image width={480} height={480} className="img-fluid thumbnail" src={product.media.source} />
         </div>
         <div className="col-12 border-top">
 
           <div className="row mt-2">
-            <div className="col-6 d-flex align-items-center">
-              <p className="badge-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
-                {this.renderLabel()}
+            <div className="col-6 col-md-9 d-flex align-items-center">
+              <p
+                className="product-name cursor-pointer text-truncate font-weight-bold"
+                onClick={this.modalDetailOperation()}
+              >
+                {product.name}
               </p>
             </div>
-            <div className="col-6 text-right d-flex align-items-center justify-content-end">
+            <div className="col-6 col-md-3 text-right d-flex align-items-center justify-content-end">
               <a onClick={this.addToWishlist}>
                 <Image
                   width={24}
@@ -124,16 +127,13 @@ export default withRouter(class ProductListItem extends Component {
           <div className="row">
             <div className="col-12 mt-2">
               <p
-                className="text-truncate cursor-pointer"
+                className="text-truncate cursor-pointer mb-2"
                 onClick={this.modalDetailOperation()}
               >
                 {product.price.formatted}
               </p>
-              <p
-                className="product-name cursor-pointer"
-                onClick={this.modalDetailOperation()}
-              >
-                {product.name}
+              <p className="badge-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
+                {this.renderLabel()}
               </p>
             </div>
           </div>
