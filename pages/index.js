@@ -8,17 +8,22 @@ import Image from '../components/common/Image';
 import Loading from '../public/images/loading.js';
 import ProductListItem from '../components/common/ProductListItem';
 import Modal from '../components/common/Modal';
-import ModalFilter from '../components/common/Modal/ModalFilter';
+// import ModalFilter from '../components/common/Modal/ModalFilter';
 import locale from '../utils/locale';
 
+const DEFAULT_QUERY = {
+  page: 0,
+  hitsPerPage: 3
+};
 class Home extends Component {
-  static async getInitialProps(ctx) {
-    const host = new URL(ctx?.req?.headers?.referer)?.origin;
-    return {
-      products: await fetch(`${host}/api/products?hitsPerPage=3`)
-        .then(res => res.json())
-    }
-  }
+  // static async getInitialProps(ctx) {
+  //   const host = new URL(ctx?.req?.headers?.referer)?.origin;
+  //   console.log(ctx.req?.headers?.host);
+  //   return {
+  //     products: await fetch(`${host}/api/products?hitsPerPage=3`)
+  //       .then(res => res.json())
+  //   }
+  // }
 
   constructor(props) {
     super(props);
@@ -54,7 +59,12 @@ class Home extends Component {
   }
 
   async componentDidMount() {
+    const { query } = this.state;
     findDOMNode(this.scrollWrapper).addEventListener('scroll', this.scrollHandler, true);
+    this.callData({
+      ...query,
+      ...DEFAULT_QUERY
+    })
   }
 
   componentWillUnmount() {
@@ -172,8 +182,7 @@ class Home extends Component {
         this.callData({
           sort_by: sort.sort_by,
           sort_order: sort.sort_order,
-          page: 0,
-          hitsPerPage: 3
+          ...DEFAULT_QUERY
         });
       });
     };
@@ -201,7 +210,7 @@ class Home extends Component {
             }
             {loading && (
               <div className="container-fluid">
-                <div className="row d-flex align-items-center justify-content-center pb-3 mb-5 mt-n5 bg-grey pt-3">
+                <div className="row d-flex align-items-center justify-content-center pt-3 mb-4 bg-grey">
                   <Image width={50} height={50} src={Loading} />
                 </div>
               </div>
@@ -249,7 +258,7 @@ class Home extends Component {
         <div className="fixed-bottom border-top bg-white filter-footer d-flex align-items-center">
           <div className="container">
             <div className="row">
-              <div className="col-6">
+              <div className="col-12 col-md-6 offset-md-3">
                 <button
                   onClick={this.modalSortOperate()}
                   className="btn btn-outline-secondary btn-block text-capitalize"
@@ -260,7 +269,7 @@ class Home extends Component {
                   {this.renderSortable()}
                 </Modal>
               </div>
-              <div className="col-6">
+              {/* <div className="col-6">
                 <button
                   onClick={this.modalFilterOperate()}
                   className="btn btn-outline-secondary btn-block text-capitalize"
@@ -274,7 +283,7 @@ class Home extends Component {
                 >
                   {modalFilter && <ModalFilter onFilter={this.changeFilter} variables={variables} />}
                 </Modal>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
