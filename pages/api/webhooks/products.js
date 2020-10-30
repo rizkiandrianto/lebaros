@@ -1,6 +1,6 @@
 import algoliasearch from "algoliasearch";
 
-const client = algoliasearch("1C5T7UKR54", "cad66586c3cc535bccd2d44055a52aec");
+const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_APP_KEY);
 
 const algoliaHandler = async (req, res) => {
   const index = client.initIndex('products')
@@ -15,7 +15,7 @@ const algoliaHandler = async (req, res) => {
       return res.status(202).end();
     case 'create':
     case 'update':
-      await index.saveObject({ objectID, finalPrice: product.price.raw, ...product })
+      await index.saveObject({ objectID, id: objectID, ...product })
       return res.status(200).send({ success: true })
     default:
       break;
