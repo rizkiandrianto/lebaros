@@ -3,6 +3,7 @@ import algoliasearch from "algoliasearch";
 const Products = async (req, res) => {
   switch (req.method) {
     case 'GET':
+      const param = {};
       const { query } = req;
       const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_APP_KEY);
       let indices = 'products';
@@ -12,9 +13,17 @@ const Products = async (req, res) => {
         indices += `_${sort}_${order}`;
       }
 
+      if (query?.page) {
+        param.page = query?.page;
+      }
+
+      if (query?.hitsPerPage) {
+        param.hitsPerPage = query?.hitsPerPage;
+      }
+
       const index = client.initIndex(indices);
 
-      const search = await index.search(query?.q || '').
+      const search = await index.search(query?.q || '', param).
         catch(() => {
           return res.status(404).send('Not Found');
         })
