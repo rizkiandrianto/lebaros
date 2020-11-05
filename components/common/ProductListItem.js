@@ -62,7 +62,7 @@ export default withRouter(class ProductListItem extends Component {
     const { modalAddToCart } = this.state;
     return (
       <Modal onHide={this.modalAddToCartOperation(false)} show={modalAddToCart}>
-        {modalAddToCart && <ModalAddToCart product={product} onAdded={this.modalAddToCartOperation(false)} />}
+        {modalAddToCart && <ModalAddToCart product={product} onSuccess={this.modalAddToCartOperation(false)} />}
       </Modal>
     );
   }
@@ -79,7 +79,6 @@ export default withRouter(class ProductListItem extends Component {
         {modalDetail &&
         (<ModalDetail
           product={product}
-          onAdded={this.modalDetailOperation(false)}
           onHide={this.modalDetailOperation(false)}
         />)
         }
