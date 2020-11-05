@@ -1,17 +1,19 @@
-import Image from "../common/Image";
-
 import React, { Component } from 'react'
+import { commerce } from '../../utils/commerce';
+import Image from "../common/Image";
 
 export default class Header extends Component {
   state = {
     wishlist: [],
-    cart: []
+    cart: null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const cart = await commerce.cart.retrieve();
+
     this.setState({
       wishlist: localStorage.getItem('wishlist') ? JSON.parse(localStorage.getItem('wishlist')) : [],
-      cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []
+      cart
     });
   }
 
@@ -41,9 +43,9 @@ export default class Header extends Component {
               </a>
             </div>
             <div className="col-auto text-right">
-              <a>
+              <a href={cart?.hosted_checkout_url}>
                 <Image width={24} height={24} src="/images/icon-cart-greyDark.png" />
-                {cart.length > 0 && <span className="badge">{cart.length}</span>}
+                {cart?.line_items?.length > 0 && <span className="badge">{cart?.line_items?.length}</span>}
               </a>
             </div>
           </div>

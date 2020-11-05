@@ -64,7 +64,7 @@ class Home extends Component {
     this.callData({
       ...query,
       ...DEFAULT_QUERY
-    })
+    });
   }
 
   componentWillUnmount() {

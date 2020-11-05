@@ -5,6 +5,7 @@ import Image from '../Image';
 import setCart from '../../../utils/addToCart';
 import locale from '../../../utils/locale';
 import { withRouter } from 'next/router';
+import { commerce } from '../../../utils/commerce';
 
 class ModalDetail extends Component {
   componentDidMount() {
@@ -69,8 +70,26 @@ class ModalDetail extends Component {
 
   addToCart() {
     const { onAdded, product } = this.props;
+    const { variants } = product;
+    const { variant: variantState } = this.state
     if (onAdded) onAdded();
-    setCart(product);
+    const isHasVariants = variants.length;
+
+    const updatedVariants = {};
+    if (isHasVariants) {
+      variants.filter((variant) => {
+        const isChoosen = Object.keys(variantState).find(varState => varState === variant.name);
+        if (isChoosen) {
+          const choosenVariant = product.variants.find(prodVar => prodVar.name === isChoosen);
+          updatedVariants[choosenVariant.id] = variantState[isChoosen];
+        }
+      });
+    }
+
+    commerce.cart.add(product.id, 1, updatedVariants)
+      .then((productAdded) => {
+        setCart(productAdded);
+      });
   }
 
   setRef(e) {

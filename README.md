@@ -10,7 +10,7 @@ What you'll see is just for you.
 - `npm run dev`
 
 ##### How to run in Production mode
-- clone my repository `https://github.com/rizkiandrianto/gojek-test`
+- clone my repository `https://github.com/rizkiandrianto/lebaros`
 - `cd lebaros`
 - `npm install`
 - `npm run production`
