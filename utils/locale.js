@@ -51,4 +51,24 @@ export default {
     en: 'apply',
     id: 'terapkan'
   },
+  removeItemFromCart: {
+    en: 'remove item',
+    id: 'hapus barang'
+  },
+  cart: {
+    en: 'cart',
+    id: 'keranjang'
+  },
+  catalog: {
+    en: 'catalog',
+    id: 'katalog'
+  },
+  checkout: {
+    en: 'checkout',
+    id: 'proses'
+  },
+  loading: {
+    en: 'loading',
+    id: 'memuat'
+  }
 }
