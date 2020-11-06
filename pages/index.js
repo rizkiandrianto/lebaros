@@ -109,6 +109,13 @@ class Home extends Component {
             ]
           }
         }));
+      })
+      .catch(() => {
+        this.setState({
+          product: {
+            hits: []
+          }
+        });
       });
   }
 
@@ -250,7 +257,7 @@ class Home extends Component {
     return (
       <>
         <Head />
-        <Header />
+        <Header title={locale.catalog[router.locale]} />
         <div className="container main-container" ref={this.addRef}>
           {this.renderProducts()}
         </div>
