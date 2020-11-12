@@ -49,27 +49,29 @@ const ModalAddToCart = ({ product, onSuccess }) => {
   }
 
   return (
-    <div className="row">
-      <div className="col-12">
-        <div className="row pb-3 border-bottom mb-2">
-          <div className="col d-flex align-items-center justify-content-center">
-            <Image src={product?.media?.source} width={200} height={200} className="object-fit-contain" />
+    <>
+      <div className="row">
+        <div className="col-12">
+          <div className="row pb-3 border-bottom mb-2">
+            <div className="col d-flex align-items-center justify-content-center">
+              <Image src={product?.media?.source} width={200} height={200} className="object-fit-contain" />
+            </div>
+            <div className="col-10">
+              <p>{product?.name}</p>
+              <p>{product?.price?.formatted}</p>
+            </div>
           </div>
-          <div className="col-10">
-            <p>{product?.name}</p>
-            <p>{product?.price?.formatted}</p>
-          </div>
-        </div>
 
-        {renderOption()}
+          {renderOption()}
 
-        <div className="row pt-3 border-top mt-3">
-          <div className="col-12">
-            <ButtonAddToCart product={product} variants={variant} onSuccess={onSuccess} />
+          <div className="row pt-3 border-top mt-3">
+            <div className="col-12">
+              <ButtonAddToCart product={product} variants={variant} onSuccess={onSuccess} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -70,5 +70,13 @@ export default {
   loading: {
     en: 'loading',
     id: 'memuat'
+  },
+  backToHome: {
+    en: 'back to home',
+    id: 'kembali ke halaman depan'
+  },
+  logoutSuccess: {
+    en: 'logout success',
+    id: 'berhasil keluar'
   }
 }

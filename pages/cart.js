@@ -10,6 +10,22 @@ import Link from 'next/link';
 const Cart = ({ router }) => {
   const { state } = useContext(StoreContext);
 
+  const getUrlCheckout = () => {
+    if (!state?.cart?.hosted_checkout_url || !state?.cart?.line_items?.length) {
+      return '/';
+    }
+
+    return `${state?.cart?.hosted_checkout_url}?return_url=${window.location.origin}`;
+  }
+
+  const getButtonCheckoutCaption = () => {
+    if (state?.cart?.line_items?.length) {
+      return `${locale.checkout[router.locale]} (${state?.cart?.subtotal?.formatted_with_symbol})`
+    }
+
+    return locale.backToHome[router.locale];
+  }
+
   const renderSentence = () => {
     const sentence = locale[!state.cart ? 'loading' : 'noProduct'][router.locale];
 
@@ -39,11 +55,11 @@ const Cart = ({ router }) => {
           ))}
         </ul>
       </div>
-      <div className="fixed-bottom py-3">
+      <div className={`fixed-bottom py-3 ${!state.cart ? 'd-none' : ''}`}>
         <div className="container">
-          <Link href={state?.cart?.hosted_checkout_url || '/'}>
+          <Link href={getUrlCheckout()}>
             <button className="btn btn-block btn-primary text-capitalize">
-              {locale.checkout[router.locale]}
+              {getButtonCheckoutCaption()}
             </button>
           </Link>
         </div>

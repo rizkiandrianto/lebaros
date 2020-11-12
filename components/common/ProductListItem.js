@@ -88,7 +88,7 @@ export default withRouter(class ProductListItem extends Component {
 
   render() {
     const { product, router } = this.props;
-    const { wishlist } = this.state;
+    // const { wishlist } = this.state;
     return (
       <div className="row product-wrapper bg-white mb-4" key={product.id}>
         <div className="thumbnail-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
@@ -97,7 +97,7 @@ export default withRouter(class ProductListItem extends Component {
         <div className="col-12 border-top">
 
           <div className="row mt-2">
-            <div className="col-6 col-md-9 d-flex align-items-center">
+            <div className="col-9 col-md-10 d-flex align-items-center">
               <p
                 className="product-name cursor-pointer text-truncate font-weight-bold"
                 onClick={this.modalDetailOperation()}
@@ -105,15 +105,15 @@ export default withRouter(class ProductListItem extends Component {
                 {product.name}
               </p>
             </div>
-            <div className="col-6 col-md-3 text-right d-flex align-items-center justify-content-end">
-              <a onClick={this.addToWishlist}>
+            <div className="col-3 col-md-2 text-right d-flex align-items-center justify-content-end">
+              {/* <a onClick={this.addToWishlist}>
                 <Image
                   width={24}
                   height={24}
                   src={`/images/icon-heart-${ wishlist.find(item => item.id === product.id) ? 'berry' : 'greyDark'}.png`}
                   className="mr-3"
                 />
-              </a>
+              </a> */}
               <button
                 onClick={this.modalAddToCartOperation()}
                 className="btn btn-primary btn-sm ml-2 text-capitalize"
@@ -129,7 +129,7 @@ export default withRouter(class ProductListItem extends Component {
                 className="text-truncate cursor-pointer mb-2"
                 onClick={this.modalDetailOperation()}
               >
-                {product.price.formatted}
+                {product.price.formatted_with_symbol}
               </p>
               <p className="badge-wrapper cursor-pointer" onClick={this.modalDetailOperation()}>
                 {this.renderLabel()}
