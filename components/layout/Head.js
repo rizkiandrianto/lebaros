@@ -1,12 +1,12 @@
-import Head from 'next/head';
+import HEAD from 'next/head';
 
-const HEAD = ({ children }) => (
-  <Head>
+const Head = ({ children }) => (
+  <HEAD>
     <title>Lebaros</title>
     <link rel="icon" href="/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     {children}
-  </Head>
+  </HEAD>
 );
 
-export default HEAD;
+export default Head;

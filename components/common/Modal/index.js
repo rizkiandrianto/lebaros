@@ -24,7 +24,7 @@ export default class Modal extends Component {
       return createPortal(
         <div className={`modal ${show ? 'show' : ''} ${className}`}>
           <div className="modal-container container">
-            {children}
+            {show && children}
           </div>
           <div className="modal-overlay" onClick={onHide} />
         </div>
