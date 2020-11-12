@@ -32,7 +32,6 @@ export default function MyApp({ Component, pageProps }) {
           if (getCurUser.exists) {
             const cart = await commerce.cart.retrieve(getCurUser.data().cart);
             Cookies.set(process.env.NEXT_PUBLIC_COOKIE_CART, cart.id, {
-              domain: window.location.hostname,
               expires: 30
             });
             param.cart = cart.id;
