@@ -1,11 +1,15 @@
-import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router';
+import firebase from 'firebase/app';
+import SnackBar from 'node-snackbar';
+import 'firebase/auth';
 import { setCart } from '../../reducer/action';
 import StoreContext from '../../reducer/context';
 import { commerce } from '../../utils/commerce';
 import Image from "../common/Image";
 import Link from 'next/link';
 import Spinner from '../common/Spinner';
+import locale from '../../utils/locale';
 
 const Header = ({ title, onBack }) => {
   const router = useRouter();
@@ -47,12 +51,21 @@ const Header = ({ title, onBack }) => {
               </a>
             </Link>
           </div>
-          <div className="col-auto text-right">
-            <a>
-              <Image width={24} height={24} src="/images/icon-heart-greyDark.png" />
-              {wishlist.length > 0 && <span className="badge">{wishlist.length}</span>}
-            </a>
-          </div>
+          {Boolean(state.user) && (
+            <div className="col-auto text-right">
+              <a onClick={async () => {
+                if (firebase.app.length) {
+                  await firebase.auth().signOut();
+                  const cart = await commerce.cart.refresh();
+                  if (cart) dispatch(setCart(cart));
+                  SnackBar.show({ text: locale.logoutSuccess[router.locale], showAction: false, customClass: 'text-capitalize' })
+                }
+              }}>
+                <Image width={24} height={24} src="/images/icon-signout.png" />
+                {wishlist.length > 0 && <span className="badge">{wishlist.length}</span>}
+              </a>
+            </div>
+          )}
           <div className="col-auto text-right position-relative">
             {
               cart ? (

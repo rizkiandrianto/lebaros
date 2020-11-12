@@ -36,13 +36,15 @@ const CartProductListItem = ({ product, router }) => {
     <li className="list-group-item">
       <div className="row">
         <div className="col-3">
-          <Image src={product.media.source} width={110} height={110} />
+          <Image className="object-fit-contain" src={product.media.source} width={110} height={110} />
         </div>
         <div className="col-9">
           <p className="font-weight-bold">{product.name}</p>
+          <p className="text-muted text-capitalize">{product.variants.map((variant) => `${variant.variant_name}: ${variant.option_name}`).join(',')}</p>
+          <p>{product.price.formatted_with_symbol}</p>
           <div>
-            <div class="form-group mt-2" style={{ width: '30%' }}>
-              <input onChange={(e) => updateQuantity(e.target.value)} type="number" class="form-control form-control-sm" value={quantity} />
+            <div className="form-group mt-2" style={{ width: '30%' }}>
+              <input onChange={(e) => updateQuantity(e.target.value)} type="number" className="form-control form-control-sm" value={quantity} />
             </div>
             <button
               className="btn btn-outline-danger btn-sm text-capitalize"

@@ -3,9 +3,9 @@ export const setCart = (value) => ({
   value
 })
 
-export const addToCart = (value) => {
+export const setUser = (value) => {
   return {
-    type: 'ADD_TO_CART',
+    type: 'SET_USER',
     value
   }
 }
