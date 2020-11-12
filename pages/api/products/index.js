@@ -25,7 +25,7 @@ const Products = async (req, res) => {
 
       const search = await index.search(query?.q || '', param).
         catch((result) => {
-          console.log('Result', result);
+          console.log('Result', process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_APP_KEY, result);
           return res.status(404).send('Not Found');
         })
 
