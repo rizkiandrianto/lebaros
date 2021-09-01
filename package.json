@@ -17,7 +17,7 @@
     "firebase": "^8.0.1",
     "js-cookie": "^2.2.1",
     "marketcloud-js": "^2.3.6",
-    "next": "^10.0.0",
+    "next": "^11.1.1",
     "node-sass": "^4.14.1",
     "node-snackbar": "^0.1.16",
     "raw-loader": "^2.0.0",
